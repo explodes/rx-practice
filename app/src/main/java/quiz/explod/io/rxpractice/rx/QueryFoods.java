@@ -1,11 +1,14 @@
 package quiz.explod.io.rxpractice.rx;
 
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.fernandocejas.arrow.optional.Optional;
 
+import io.explod.querydb.util.CursorUtils;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import quiz.explod.io.rxpractice.data.Food;
 import quiz.explod.io.rxpractice.data.FoodDatabase;
 
@@ -39,7 +42,25 @@ public class QueryFoods {
      */
     @NonNull
     public Single<Optional<Food>> getFoodById(long id) {
-        return null;
+        return Single.fromCallable(
+                () -> {
+                    Cursor c = null;
+                    try {
+                        c = mDb.select().table(TABLE).columns(COLUMN_NAME, COLUMN_RATING).byId(id).execute();
+                        if (!c.moveToFirst()) {
+                            return Optional.<Food>absent();
+                        } else {
+                            String name = CursorUtils.getString(c, COLUMN_NAME);
+                            int rating = CursorUtils.getInt(c, COLUMN_RATING);
+                            return Optional.of(new Food(id, name, rating));
+                        }
+                    } finally {
+                        if (c != null) {
+                            c.close();
+                        }
+                    }
+                })
+                .observeOn(Schedulers.io());
     }
 
     /**
@@ -58,6 +79,26 @@ public class QueryFoods {
      */
     @NonNull
     public Observable<Food> getAllFood() {
-        return null;
+        return Observable.<Food>create(
+                s -> {
+                    Cursor c = null;
+                    try {
+                        c = mDb.select().table(TABLE).columns(COLUMN_ID, COLUMN_NAME, COLUMN_RATING).execute();
+                        while (c.moveToNext()) {
+                            long id = CursorUtils.getId(c);
+                            String name = CursorUtils.getString(c, COLUMN_NAME);
+                            int rating = CursorUtils.getInt(c, COLUMN_RATING);
+                            s.onNext(new Food(id, name, rating));
+                        }
+                        s.onComplete();
+                    } catch (Exception ex) {
+                        s.onError(new Exception("Unable to query foods", ex));
+                    } finally {
+                        if (c != null) {
+                            c.close();
+                        }
+                    }
+                })
+                .observeOn(Schedulers.io());
     }
 }

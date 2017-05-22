@@ -3,6 +3,7 @@ package quiz.explod.io.rxpractice.rx;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MathematicalMapping {
 
@@ -20,7 +21,22 @@ public class MathematicalMapping {
      */
     @NonNull
     public Observable<Long> performCrazyTransformations(@NonNull Observable<Long> source) {
-        return null;
+        return source
+                .map(x -> x * 2)
+                .map(String::valueOf)
+                .map(MathematicalMapping::reverseString)
+                .map(x -> "-" + x)
+                .map(Long::parseLong)
+                .observeOn(Schedulers.computation());
+    }
+
+    @NonNull
+    private static String reverseString(@NonNull String s) {
+        StringBuilder out = new StringBuilder(s.length());
+        for (int i = s.length() - 1; i >= 0; i--) {
+            out.append(s.charAt(i));
+        }
+        return out.toString();
     }
 
 }
