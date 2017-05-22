@@ -23,7 +23,12 @@ public class SimpleOnes {
      */
     @NonNull
     public Observable<Long> countToInfinity() {
-        return null;
+        return Observable.create(s -> {
+            long count = -1;
+            while (!s.isDisposed()) {
+                s.onNext(++count);
+            }
+        });
     }
 
     /**
@@ -40,7 +45,7 @@ public class SimpleOnes {
      */
     @NonNull
     public <T> Observable<T> combine(@NonNull Observable<T> sourceA, @NonNull Observable<T> sourceB) {
-        return null;
+        return Observable.merge(sourceA, sourceB);
     }
 
     /**
@@ -54,7 +59,7 @@ public class SimpleOnes {
      */
     @NonNull
     public Observable<String> abcEmitter(@NonNull Observable<?> trigger) {
-        return null;
+        return trigger.flatMap(x -> Observable.fromArray("a", "b", "c"));
     }
 
 }
