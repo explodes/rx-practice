@@ -3,7 +3,6 @@ package quiz.explod.io.rxpractice.rx;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import io.reactivex.Observable;
