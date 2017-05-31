@@ -20,11 +20,6 @@ public class Subscriptions {
      * @param complete callback to call when the source has completed. If error occurred, it is passed back, otherwise it is null
      */
     public void onComplete(@NonNull Observable<?> source, @NonNull Callback<Throwable> complete) {
-        source.subscribe(
-                x -> {/* no-op */},
-                complete::callback,
-                () -> complete.callback(null)
-        );
     }
 
     /**
@@ -35,7 +30,7 @@ public class Subscriptions {
      */
     @NonNull
     public <T> Set<T> unique(@NonNull Observable<T> source) throws Exception {
-        return source.collectInto(new HashSet<T>(), Set::add).blockingGet();
+        return null;
     }
 
 }
