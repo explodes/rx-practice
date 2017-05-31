@@ -17,21 +17,7 @@ public class EventBusFactory {
      */
     @NonNull
     public static <T> EventBus<T> create() {
-        return new EventBus<T>() {
-
-            Subject<T> bus = PublishSubject.create();
-
-            @Override
-            public void publish(@NonNull T event) {
-                bus.onNext(event);
-            }
-
-            @NonNull
-            @Override
-            public Observable<T> getObservable() {
-                return bus.toFlowable(BackpressureStrategy.BUFFER).toObservable();
-            }
-        };
+        return null;
     }
 
 }
