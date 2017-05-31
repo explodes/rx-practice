@@ -60,7 +60,7 @@ public class QueryFoods {
                         }
                     }
                 })
-                .observeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io());
     }
 
     /**
@@ -99,6 +99,6 @@ public class QueryFoods {
                         }
                     }
                 })
-                .observeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io());
     }
 }

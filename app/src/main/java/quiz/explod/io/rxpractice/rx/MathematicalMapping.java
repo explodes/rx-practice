@@ -27,7 +27,7 @@ public class MathematicalMapping {
                 .map(MathematicalMapping::reverseString)
                 .map(x -> "-" + x)
                 .map(Long::parseLong)
-                .observeOn(Schedulers.computation());
+                .subscribeOn(Schedulers.computation());
     }
 
     @NonNull
